@@ -9,12 +9,10 @@ class EquipoForm(forms.ModelForm):
         model = Equipo
         fields = ["nombre", "alumnos", "materias"]
         widgets = {
-            "nombre": forms.TextInput(
-                attrs={
-                    "class": "form-control mb-3",
-                    "placeholder": "Nombre del equipo",
-                }
-            ),
+            "nombre": forms.TextInput(attrs={
+                "class": "form-control mb-3",
+                "placeholder": "Nombre del equipo"
+            }),
             "alumnos": ModelSelect2MultipleWidget(
                 model=Alumno,
                 search_fields=[
@@ -22,12 +20,12 @@ class EquipoForm(forms.ModelForm):
                     "apellido_materno__icontains",
                     "nombre__icontains",
                 ],
-                attrs={"class": "form-select mb-3"},
+                attrs={"class": "form-select mb-3 select2"},
             ),
             "materias": ModelSelect2MultipleWidget(
                 model=Materia,
                 search_fields=["nombre__icontains", "codigo__icontains"],
-                attrs={"class": "form-select mb-3"},
+                attrs={"class": "form-select mb-3 select2"},
             ),
         }
         labels = {

@@ -7,22 +7,22 @@
     <h1 class="mb-4">Crear Equipo</h1>
     <form method="post" novalidate class="modern-form">
       {% csrf_token %}
-      <div class="form-group">
+      <div class="form-group mb-3">
         {{ form.nombre.label_tag }}
         {{ form.nombre }}
       </div>
-      <div class="form-group">
+      <div class="form-group mb-3">
         {{ form.materias.label_tag }}
         {{ form.materias }}
       </div>
-      <div class="form-group">
+      <div class="form-group mb-3">
         {{ form.alumnos.label_tag }}
         {{ form.alumnos }}
       </div>
-      <button type="submit" class="btn-primary-action">
-        <i class="fa fa-save me-2"></i>Guardar
+      <button type="submit" class="btn btn-primary">
+        <i class="fa fa-save me-2"></i> Guardar
       </button>
-      <a href="{% url 'home' %}" class="btn-secondary-action ms-2">Cancelar</a>
+      <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancelar</a>
     </form>
     {{ form.media }}
   </div>
