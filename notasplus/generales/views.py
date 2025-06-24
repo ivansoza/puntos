@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from equipos.models import Alumno, Materia, Equipo
 from django.db.models import Sum
 
-from generales.forms import AlumnoForm, MateriaForm
+from generales.forms import AlumnoForm, MateriaForm, EquipoForm
 
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'generales/index.html'
@@ -40,7 +40,7 @@ class MateriaListView(LoginRequiredMixin, ListView):
 
 class EquipoCreateView(LoginRequiredMixin, CreateView):
     model = Equipo
-    fields = ['nombre', 'alumnos', 'materias']
+    form_class = EquipoForm
     template_name = 'generales/equipo_form.html'
     success_url = reverse_lazy('home')
 
@@ -50,7 +50,18 @@ class EquipoListView(LoginRequiredMixin, ListView):
     context_object_name = 'equipos'
     template_name = 'generales/equipo_list.html'
 
+
+class EquipoDetailView(LoginRequiredMixin, DetailView):
+    model = Equipo
+    context_object_name = 'equipo'
+    template_name = 'generales/equipo_detail.html'
+
 class MateriaDetailView(LoginRequiredMixin, DetailView):
     model = Materia
     context_object_name = 'materia'
     template_name = 'generales/materia_detail.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['equipos'] = self.object.equipos.all()
+        return ctx

@@ -1,0 +1,28 @@
+{% extends 'generales/base.html' %}
+
+{% block title %}Equipo: {{ equipo.nombre }}{% endblock %}
+
+{% block content %}
+  <h1>{{ equipo.nombre }}</h1>
+  <p><strong>Puntos:</strong> {{ equipo.puntos }}</p>
+
+  <h4>Materias:</h4>
+  <ul>
+    {% for m in equipo.materias.all %}
+      <li>{{ m.nombre }}</li>
+    {% empty %}
+      <li>Sin materias.</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Alumnos:</h4>
+  <ul>
+    {% for a in equipo.alumnos.all %}
+      <li>{{ a }}</li>
+    {% empty %}
+      <li>Sin alumnos.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'home' %}" class="btn btn-secondary">← Volver al inicio</a>
+{% endblock %}
