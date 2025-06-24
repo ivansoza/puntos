@@ -65,26 +65,3 @@ class AlumnoForm(forms.ModelForm):
         help_texts = {
             'año_de_generacion': 'Ejemplo: 2021',
         }
-
-
-class EquipoForm(forms.ModelForm):
-    class Meta:
-        model = Equipo
-        fields = ['nombre', 'alumnos', 'materias']
-        widgets = {
-            'nombre': forms.TextInput(attrs={
-                'class': 'form-control mb-3',
-                'placeholder': 'Nombre del equipo',
-            }),
-            'alumnos': forms.SelectMultiple(attrs={
-                'class': 'form-select mb-3',
-            }),
-            'materias': forms.SelectMultiple(attrs={
-                'class': 'form-select mb-3',
-            }),
-        }
-        labels = {
-            'nombre': 'Nombre',
-            'alumnos': 'Alumnos',
-            'materias': 'Materias',
-        }

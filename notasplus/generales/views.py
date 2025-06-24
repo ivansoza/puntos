@@ -1,11 +1,13 @@
 # views.py
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, CreateView, ListView, DetailView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, View
+from django.shortcuts import redirect, get_object_or_404
 from equipos.models import Alumno, Materia, Equipo
-from django.db.models import Sum
+from django.db.models import Sum, F
 
-from generales.forms import AlumnoForm, MateriaForm, EquipoForm
+from generales.forms import AlumnoForm, MateriaForm
+from equipos.forms import EquipoForm
 
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'generales/index.html'
@@ -65,3 +67,18 @@ class MateriaDetailView(LoginRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['equipos'] = self.object.equipos.all()
         return ctx
+
+
+class EquipoAddPointView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        Equipo.objects.filter(pk=pk).update(puntos=F('puntos') + 1)
+        return redirect('equipo_list')
+
+
+class EquipoRemovePointView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        equipo = get_object_or_404(Equipo, pk=pk)
+        if equipo.puntos > 0:
+            equipo.puntos -= 1
+            equipo.save()
+        return redirect('equipo_list')

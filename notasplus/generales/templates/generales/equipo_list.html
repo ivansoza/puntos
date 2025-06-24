@@ -27,12 +27,41 @@
                 <li>Sin alumnos asignados.</li>
               {% endfor %}
             </ul>
-            <p><strong>Puntos:</strong> {{ equipo.puntos }}</p>
+            <p>
+              <strong>Puntos:</strong> {{ equipo.puntos }}
+              <span class="points-actions">
+                <form method="post" action="{% url 'equipo_add_point' equipo.pk %}" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="points-btn">+</button>
+                </form>
+                <form method="post" action="{% url 'equipo_remove_point' equipo.pk %}" class="d-inline">
+                  {% csrf_token %}
+                  <button type="submit" class="points-btn minus">-</button>
+                </form>
+              </span>
+            </p>
           </div>
         </div>
       </div>
     {% empty %}
       <p>No hay grupos creados.</p>
     {% endfor %}
-  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <style>
+    .points-actions { display: inline-flex; gap: 0.25rem; margin-left: 0.5rem; }
+    .points-actions form { display: inline; }
+    .points-btn {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+    }
+    .points-btn.minus { background: var(--danger-color); }
+  </style>
 {% endblock %}
