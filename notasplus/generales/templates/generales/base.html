@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NotasPlus - Tu gestor de notas{% endblock %}</title>
     <meta name="description" content="{% block description %}NotasPlus - Gestiona tus notas de forma inteligente y organizada{% endblock %}">
-    
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet" />
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'notasplus/favicon.ico' %}">
     
@@ -207,6 +208,7 @@
         });
       });
     </script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     {% block extra_js %}{% endblock %}
 </body>
