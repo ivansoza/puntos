@@ -1,0 +1,23 @@
+{% extends 'generales/base.html' %}
+
+{% block title %}Listado de Materias{% endblock %}
+
+{% block content %}
+  <h1>Materias Registradas</h1>
+  <div class="row">
+    {% for materia in materias %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ materia.nombre }}</h5>
+            {% if materia.codigo %}
+              <p class="card-text"><strong>Código:</strong> {{ materia.codigo }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No hay materias para listar.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

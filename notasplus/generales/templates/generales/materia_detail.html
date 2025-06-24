@@ -1,0 +1,18 @@
+{% extends 'generales/base.html' %}
+
+{% block title %}Detalle: {{ materia.nombre }}{% endblock %}
+
+{% block content %}
+  <h1>{{ materia.nombre }}</h1>
+  {% if materia.codigo %}
+    <p><strong>Código:</strong> {{ materia.codigo }}</p>
+  {% endif %}
+
+  {# Aquí NO listamos equipos, sólo los detalles de la materia #}
+
+  <div class="mt-4">
+    <a href="{% url 'materia_list' %}" class="btn btn-secondary">
+      ← Volver a Materias
+    </a>
+  </div>
+{% endblock %}

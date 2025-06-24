@@ -1,0 +1,12 @@
+{% extends 'generales/base.html' %}
+
+{% block title %}Crear Alumno{% endblock %}
+
+{% block content %}
+  <h1>Agregar Alumno</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Guardar Alumno</button>
+  </form>
+{% endblock %}

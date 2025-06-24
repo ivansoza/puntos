@@ -1,0 +1,38 @@
+{# templates/generales/equipo_list.html #}
+{% extends 'generales/base.html' %}
+
+{% block title %}Grupos{% endblock %}
+
+{% block content %}
+  <h1>Grupos</h1>
+  <div class="row">
+    {% for equipo in equipos %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-header">{{ equipo.nombre }}</div>
+          <div class="card-body">
+            <h6>Materias:</h6>
+            <ul>
+              {% for m in equipo.materias.all %}
+                <li>{{ m.nombre }}</li>
+              {% empty %}
+                <li>Sin materias asignadas.</li>
+              {% endfor %}
+            </ul>
+            <h6>Alumnos:</h6>
+            <ul>
+              {% for a in equipo.alumnos.all %}
+                <li>{{ a.apellido_paterno }} {{ a.apellido_materno }} {{ a.nombre }}</li>
+              {% empty %}
+                <li>Sin alumnos asignados.</li>
+              {% endfor %}
+            </ul>
+            <p><strong>Puntos:</strong> {{ equipo.puntos }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>No hay grupos creados.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
