@@ -5,15 +5,24 @@
     <title>{% block title %}NotasPlus{% endblock %}</title>
 </head>
 <body>
+<!-- base.html -->
     <header>
-        <nav>
-            {% if user.is_authenticated %}
-                Bienvenido, {{ user.username }} | <a href="{% url 'logout' %}">Cerrar sesión</a>
-            {% else %}
-                <a href="{% url 'login' %}">Ingresar</a>
-            {% endif %}
-        </nav>
+    <nav>
+        {% if user.is_authenticated %}
+        Bienvenido, {{ user.username }} |
+        <form action="{% url 'logout' %}" method="post" style="display:inline">
+            {% csrf_token %}
+            <button
+            type="submit"
+            style="background:none;border:none;padding:0;font:inherit;color:blue;text-decoration:underline;cursor:pointer;"
+            >Cerrar sesión</button>
+        </form>
+        {% else %}
+        <a href="{% url 'login' %}">Ingresar</a>
+        {% endif %}
+    </nav>
     </header>
+
     <div class="container">
         {% block content %}{% endblock %}
     </div>

@@ -124,7 +124,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Login configuration
-LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = '/'
+# settings.py
+
+# URL a la que Django redirige cuando pide login y no estás autenticado
+LOGIN_URL = 'login'            
+
+# Después de hacer login con éxito, Django irá a la URL con name='home'
+LOGIN_REDIRECT_URL = 'home'    
+
+# Después de hacer logout, Django irá a la URL con name='login'
+LOGOUT_REDIRECT_URL = 'login'  
