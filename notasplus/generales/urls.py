@@ -12,4 +12,5 @@ urlpatterns = [
     # Equipos...
     path('equipos/crear/',           views.EquipoCreateView.as_view(),  name='equipo_create'),
     path('equipos/',                 views.EquipoListView.as_view(),    name='equipo_list'),
+    path('equipos/<int:pk>/',        views.EquipoDetailView.as_view(),  name='equipo_detail'),
 ]

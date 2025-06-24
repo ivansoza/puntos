@@ -1,12 +1,28 @@
 {% extends 'generales/base.html' %}
 
-{% block title %}Crear Grupo{% endblock %}
+{% block title %}Crear Equipo{% endblock %}
 
 {% block content %}
-  <h1>Crear Grupo</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Guardar</button>
-  </form>
+  <div class="form-container">
+    <h1 class="mb-4">Crear Equipo</h1>
+    <form method="post" novalidate class="modern-form">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.nombre.label_tag }}
+        {{ form.nombre }}
+      </div>
+      <div class="form-group">
+        {{ form.materias.label_tag }}
+        {{ form.materias }}
+      </div>
+      <div class="form-group">
+        {{ form.alumnos.label_tag }}
+        {{ form.alumnos }}
+      </div>
+      <button type="submit" class="btn-primary-action">
+        <i class="fa fa-save me-2"></i>Guardar
+      </button>
+      <a href="{% url 'home' %}" class="btn-secondary-action ms-2">Cancelar</a>
+    </form>
+  </div>
 {% endblock %}
