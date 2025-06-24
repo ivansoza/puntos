@@ -1,12 +1,534 @@
+{# generales/templates/generales/materia_form.html #}
 {% extends 'generales/base.html' %}
 
 {% block title %}Crear Materia{% endblock %}
 
 {% block content %}
-  <h1>Crear Materia</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Guardar Materia</button>
-  </form>
+  <div class="form-container">
+    <div class="form-header">
+      <div class="form-icon">
+        <i class="fa fa-plus-circle"></i>
+      </div>
+      <h1 class="form-title">Crear Nueva Materia</h1>
+      <p class="form-subtitle">Complete la información para registrar una nueva materia en el sistema</p>
+    </div>
+
+    <div class="form-card">
+      <form method="post" novalidate class="modern-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="{{ form.nombre.id_for_label }}" class="form-label">
+            <i class="fa fa-book me-2"></i>{{ form.nombre.label }}
+            <span class="required-indicator">*</span>
+          </label>
+          <div class="input-wrapper">
+            {{ form.nombre }}
+            <div class="input-icon">
+              <i class="fa fa-book-open"></i>
+            </div>
+          </div>
+          {% for err in form.nombre.errors %}
+            <div class="error-message">
+              <i class="fa fa-exclamation-circle me-1"></i>{{ err }}
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.codigo.id_for_label }}" class="form-label">
+            <i class="fa fa-hashtag me-2"></i>{{ form.codigo.label }}
+            <span class="optional-indicator">(Opcional)</span>
+          </label>
+          <div class="input-wrapper">
+            {{ form.codigo }}
+            <div class="input-icon">
+              <i class="fa fa-code"></i>
+            </div>
+          </div>
+          {% for err in form.codigo.errors %}
+            <div class="error-message">
+              <i class="fa fa-exclamation-circle me-1"></i>{{ err }}
+            </div>
+          {% endfor %}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary-action">
+            <i class="fa fa-save me-2"></i>
+            Guardar Materia
+          </button>
+          <a href="{% url 'home' %}" class="btn-secondary-action">
+            <i class="fa fa-times me-2"></i>
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="form-help">
+      <div class="help-item">
+        <i class="fa fa-info-circle"></i>
+        <div>
+          <strong>Nombre de la Materia:</strong>
+          <span>Ingrese el nombre completo de la materia o asignatura</span>
+        </div>
+      </div>
+      <div class="help-item">
+        <i class="fa fa-lightbulb"></i>
+        <div>
+          <strong>Código:</strong>
+          <span>Puede agregar un código identificador único (ej: MAT-101, FIS-201)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <style>
+    /* === VARIABLES CSS === */
+    :root {
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #dbeafe;
+      --success-color: #10b981;
+      --success-hover: #059669;
+      --success-light: #d1fae5;
+      --danger-color: #ef4444;
+      --danger-light: #fee2e2;
+      --warning-color: #f59e0b;
+      --warning-light: #fef3c7;
+      --surface-color: #ffffff;
+      --surface-secondary: #f8fafc;
+      --surface-hover: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-focus: #3b82f6;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius: 0.75rem;
+      --radius-sm: 0.5rem;
+      --radius-lg: 1rem;
+    }
+
+    /* === CONTENEDOR PRINCIPAL === */
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* === HEADER DEL FORMULARIO === */
+    .form-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .form-icon {
+      width: 4rem;
+      height: 4rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: white;
+      font-size: 1.75rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .form-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin: 0;
+      max-width: 400px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* === TARJETA DEL FORMULARIO === */
+    .form-card {
+      background: var(--surface-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    }
+
+    /* === FORMULARIO MODERNO === */
+    .modern-form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-label {
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+
+    .required-indicator {
+      color: var(--danger-color);
+      margin-left: 0.25rem;
+      font-weight: 900;
+    }
+
+    .optional-indicator {
+      color: var(--text-muted);
+      font-weight: 400;
+      font-size: 0.875rem;
+      margin-left: 0.5rem;
+    }
+
+    /* === WRAPPER DE INPUT === */
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: var(--surface-color);
+      color: var(--text-primary);
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .input-wrapper input:hover {
+      border-color: var(--primary-color);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      transition: color 0.3s ease;
+      z-index: 1;
+    }
+
+    .input-wrapper:focus-within .input-icon {
+      color: var(--primary-color);
+    }
+
+    /* === MENSAJES DE ERROR === */
+    .error-message {
+      display: flex;
+      align-items: center;
+      color: var(--danger-color);
+      font-size: 0.875rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: var(--danger-light);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--danger-color);
+    }
+
+    /* === ACCIONES DEL FORMULARIO === */
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn-primary-action {
+      flex: 1;
+      background: linear-gradient(135deg, var(--success-color), var(--success-hover));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary-action:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      background: linear-gradient(135deg, var(--success-hover), #047857);
+    }
+
+    .btn-primary-action:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary-action {
+      flex: 1;
+      background: var(--surface-secondary);
+      color: var(--text-secondary);
+      border: 2px solid var(--border-color);
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .btn-secondary-action:hover {
+      background: var(--surface-hover);
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    /* === SECCIÓN DE AYUDA === */
+    .form-help {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--surface-secondary);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+    }
+
+    .help-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .help-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .help-item i {
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      margin-top: 0.125rem;
+      flex-shrink: 0;
+    }
+
+    .help-item div {
+      flex: 1;
+    }
+
+    .help-item strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .help-item span {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    /* === ESTADOS DE VALIDACIÓN === */
+    .input-wrapper input.is-invalid {
+      border-color: var(--danger-color);
+      background: #fef2f2;
+    }
+
+    .input-wrapper input.is-invalid:focus {
+      box-shadow: 0 0 0 3px var(--danger-light);
+    }
+
+    .input-wrapper input.is-valid {
+      border-color: var(--success-color);
+      background: #f0fdf4;
+    }
+
+    .input-wrapper input.is-valid:focus {
+      box-shadow: 0 0 0 3px var(--success-light);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 1rem;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
+
+      .form-title {
+        font-size: 1.75rem;
+      }
+
+      .form-subtitle {
+        font-size: 1rem;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn-primary-action,
+      .btn-secondary-action {
+        flex: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-icon {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.5rem;
+      }
+
+      .form-title {
+        font-size: 1.5rem;
+      }
+
+      .input-wrapper input {
+        padding: 0.875rem 0.875rem 0.875rem 2.5rem;
+      }
+
+      .input-icon {
+        left: 0.875rem;
+      }
+    }
+
+    /* === ANIMACIONES === */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .form-group {
+      animation: fadeInUp 0.6s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-actions { animation-delay: 0.3s; }
+  </style>
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  
+  <script>
+    $(document).ready(function() {
+      // Mejorar la experiencia de los inputs
+      $('.input-wrapper input').each(function() {
+        const $input = $(this);
+        
+        // Validación en tiempo real
+        $input.on('input blur', function() {
+          const value = $(this).val().trim();
+          
+          // Remover clases previas
+          $(this).removeClass('is-valid is-invalid');
+          
+          // Validar según el campo
+          if ($(this).attr('name') === 'nombre') {
+            if (value.length >= 3) {
+              $(this).addClass('is-valid');
+            } else if (value.length > 0) {
+              $(this).addClass('is-invalid');
+            }
+          }
+          
+          if ($(this).attr('name') === 'codigo') {
+            if (value.length === 0 || (value.length >= 2 && value.length <= 10)) {
+              $(this).addClass('is-valid');
+            } else {
+              $(this).addClass('is-invalid');
+            }
+          }
+        });
+        
+        // Efecto de focus mejorado
+        $input.on('focus', function() {
+          $(this).parent().addClass('focused');
+        });
+        
+        $input.on('blur', function() {
+          $(this).parent().removeClass('focused');
+        });
+      });
+      
+      // Animación de envío del formulario
+      $('.modern-form').on('submit', function(e) {
+        const $submitBtn = $('.btn-primary-action');
+        
+        $submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Guardando...');
+        $submitBtn.prop('disabled', true);
+        
+        // Si hay errores, restaurar el botón después de un tiempo
+        setTimeout(() => {
+          if ($('.error-message').length > 0) {
+            $submitBtn.html('<i class="fas fa-save me-2"></i>Guardar Materia');
+            $submitBtn.prop('disabled', false);
+          }
+        }, 1000);
+      });
+      
+      // Auto-focus en el primer campo
+      setTimeout(() => {
+        $('input[name="nombre"]').focus();
+      }, 500);
+    });
+  </script>
 {% endblock %}

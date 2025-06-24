@@ -5,6 +5,8 @@ from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from equipos.models import Alumno, Materia, Equipo
 from django.db.models import Sum
 
+from generales.forms import AlumnoForm, MateriaForm
+
 class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'generales/index.html'
 
@@ -20,16 +22,15 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return ctx
 class AlumnoCreateView(LoginRequiredMixin, CreateView):
     model = Alumno
-    fields = ['apellido_paterno', 'apellido_materno', 'nombre', 'matricula', 'año_de_generacion']
+    form_class = AlumnoForm
     template_name = 'generales/alumno_form.html'
     success_url = reverse_lazy('home')
 
 class MateriaCreateView(LoginRequiredMixin, CreateView):
     model = Materia
-    fields = ['nombre', 'codigo']
+    form_class = MateriaForm
     template_name = 'generales/materia_form.html'
     success_url = reverse_lazy('home')
-
 
 class MateriaListView(LoginRequiredMixin, ListView):
     model = Materia
