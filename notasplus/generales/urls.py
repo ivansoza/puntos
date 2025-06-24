@@ -13,4 +13,6 @@ urlpatterns = [
     path('equipos/crear/',           views.EquipoCreateView.as_view(),  name='equipo_create'),
     path('equipos/',                 views.EquipoListView.as_view(),    name='equipo_list'),
     path('equipos/<int:pk>/',        views.EquipoDetailView.as_view(),  name='equipo_detail'),
+    path('equipos/<int:pk>/add_point/',    views.EquipoAddPointView.as_view(),    name='equipo_add_point'),
+    path('equipos/<int:pk>/remove_point/', views.EquipoRemovePointView.as_view(), name='equipo_remove_point'),
 ]
