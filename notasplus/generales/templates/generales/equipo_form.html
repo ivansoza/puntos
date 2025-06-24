@@ -5,39 +5,68 @@
 {% block content %}
   <div class="form-container">
     <h1 class="mb-4">Crear Equipo</h1>
-    <form method="post" novalidate class="modern-form">
-      {% csrf_token %}
-      <div class="form-group mb-3">
-        {{ form.nombre.label_tag }}
-        {{ form.nombre }}
-      </div>
-      <div class="form-group mb-3">
-        {{ form.materias.label_tag }}
-        {{ form.materias }}
-      </div>
-      <div class="form-group mb-3">
-        {{ form.alumnos.label_tag }}
-        {{ form.alumnos }}
-      </div>
-      <button type="submit" class="btn btn-primary">
-        <i class="fa fa-save me-2"></i> Guardar
-      </button>
-      <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancelar</a>
-    </form>
+<form method="post" novalidate class="modern-form">
+  {% csrf_token %}
+
+  {# — Nombre — #}
+  <div class="form-group mb-3">
+    {{ form.nombre.label_tag }}
+    {{ form.nombre }}
+    {% for err in form.nombre.errors %}
+      <div class="text-danger small">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  {# — Materias — #}
+  <div class="form-group mb-3">
+    {{ form.materias.label_tag }}
+    {{ form.materias }}
+    {% for err in form.materias.errors %}
+      <div class="text-danger small">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  {# — Alumnos — #}
+  <div class="form-group mb-3">
+    {{ form.alumnos.label_tag }}
+    {{ form.alumnos }}
+    {% for err in form.alumnos.errors %}
+      <div class="text-danger small">{{ err }}</div>
+    {% endfor %}
+  </div>
+
+  {# — Errores no asociados a campo — #}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+      {% for err in form.non_field_errors %}
+        <div>{{ err }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <button type="submit" class="btn btn-primary">
+    <i class="fa fa-save me-2"></i> Guardar
+  </button>
+  <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancelar</a>
+</form>
     {{ form.media }}
   </div>
 
 
-  <script>
-  $(document).ready(function(){
-    $('.select2').select2({
-      placeholder: function(){
-        return $(this).data('placeholder');
-      },
-      allowClear: true,
-      width: '100%'
-    });
-  });
-</script>
 
+
+{% endblock %}
+
+
+{% block extra_js %}
+  {{ block.super }}
+  <script>
+    $(function(){
+      $('.select2').select2({
+        placeholder: function(){ return $(this).data('placeholder') },
+        allowClear: true,
+        width: '100%'
+      });
+    });
+  </script>
 {% endblock %}
