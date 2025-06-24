@@ -20,12 +20,18 @@ class EquipoForm(forms.ModelForm):
                     "apellido_materno__icontains",
                     "nombre__icontains",
                 ],
-                attrs={"class": "form-select mb-3 select2"},
+                attrs={
+                    "class": "form-select mb-3 select2",
+                    "data-minimum-input-length": 0,
+                },
             ),
             "materias": ModelSelect2MultipleWidget(
                 model=Materia,
                 search_fields=["nombre__icontains", "codigo__icontains"],
-                attrs={"class": "form-select mb-3 select2"},
+                attrs={
+                    "class": "form-select mb-3 select2",
+                    "data-minimum-input-length": 0,
+                },
             ),
         }
         labels = {
