@@ -1,0 +1,43 @@
+{% extends "generales/base.html" %}
+{% block title %}Calificar {{ actividad }}{% endblock %}
+
+{% block content %}
+<h1 class="subject-title mb-4">
+  Calificaciones – {{ actividad.titulo }}
+</h1>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ formset.management_form }}
+
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th style="width:160px;">Calificación</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for form in formset %}
+        {# Campo oculto con el ID de la calificación #}
+        {{ form.id }}
+        <tr>
+          <td>
+            {{ form.alumno }}
+            {{ form.alumno.errors }}
+          </td>
+          <td>
+            {{ form.valor }}
+            {{ form.valor.errors }}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button class="btn btn-success me-2">Guardar</button>
+  <a href="{% url 'submateria_detail' submateria.pk %}"
+     class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

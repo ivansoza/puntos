@@ -1,6 +1,6 @@
 # generales/forms.py
 from django import forms
-from equipos.models import Materia, Alumno, Equipo
+from equipos.models import Actividad, Calificacion, Materia, Alumno, Equipo, SubMateria
 
 
 class MateriaForm(forms.ModelForm):
@@ -65,3 +65,59 @@ class AlumnoForm(forms.ModelForm):
         help_texts = {
             'año_de_generacion': 'Ejemplo: 2021',
         }
+
+
+
+# forms.py
+from django import forms
+from django.forms import inlineformset_factory
+
+from equipos.models import Alumno
+
+
+class SubMateriaForm(forms.ModelForm):
+    class Meta:
+        model  = SubMateria
+        fields = ("nombre",)
+        widgets = {
+            "nombre": forms.TextInput(attrs={"class": "form-control",
+                                             "placeholder": "Nombre de la sub-materia"})
+        }
+
+
+class ActividadForm(forms.ModelForm):
+    class Meta:
+        model  = Actividad
+        fields = ("titulo", "descripcion", "fecha_entrega", "ponderacion")
+        widgets = {
+            "titulo":        forms.TextInput(attrs={"class": "form-control"}),
+            "descripcion":   forms.Textarea(attrs={"class": "form-control", "rows": 3}),
+            "fecha_entrega": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "ponderacion":   forms.NumberInput(attrs={"class": "form-control", "min": 1}),
+        }
+
+
+# ----- Calificaciones -----
+class CalificacionForm(forms.ModelForm):
+    class Meta:
+        model   = Calificacion
+        fields  = ("alumno", "valor")
+        widgets = {
+            "alumno": forms.Select(attrs={
+                "class": "form-select",
+            }),
+            "valor":  forms.NumberInput(attrs={
+                "class": "form-control",
+                "step": 0.1,
+                "min": 0,
+                "max": 10,
+            }),
+        }
+
+CalificacionFormSet = inlineformset_factory(
+    Actividad,
+    Calificacion,
+    form=CalificacionForm,
+    extra=0,
+    can_delete=False,
+)

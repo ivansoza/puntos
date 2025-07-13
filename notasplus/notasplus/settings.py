@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django_select2',
     'generales',
     'equipos',
+        'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [

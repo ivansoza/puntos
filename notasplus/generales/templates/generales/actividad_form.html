@@ -1,0 +1,10 @@
+{% extends "generales/base.html" %}
+{% block title %}Nueva actividad{% endblock %}
+{% block content %}
+<h1>Nueva actividad para {{ submateria }}</h1>
+<form method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary">Guardar</button>
+  <a href="{% url 'submateria_detail' submateria.pk %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

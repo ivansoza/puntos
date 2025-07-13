@@ -15,4 +15,23 @@ urlpatterns = [
     path('equipos/<int:pk>/',        views.EquipoDetailView.as_view(),  name='equipo_detail'),
     path('equipos/<int:pk>/add_point/',    views.EquipoAddPointView.as_view(),    name='equipo_add_point'),
     path('equipos/<int:pk>/remove_point/', views.EquipoRemovePointView.as_view(), name='equipo_remove_point'),
+    path(
+        'equipo/<int:pk>/cambiar-puntos/<str:action>/',
+        views.cambiar_puntos,
+        name='equipo_cambiar_puntos'
+    ),
+
+    # Sub-materias
+    path("materia/<int:materia_id>/subcrear/", views.SubMateriaCreateView.as_view(),
+         name="submateria_create"),
+    path("submateria/<int:pk>/", views.SubMateriaDetailView.as_view(),
+         name="submateria_detail"),
+
+    # Actividades
+    path("submateria/<int:submateria_id>/actividad/crear/",
+         views.ActividadCreateView.as_view(), name="actividad_create"),
+
+    # Calificaciones
+    path("actividad/<int:actividad_id>/calificar/",
+         views.CalificacionUpdateView.as_view(), name="calificacion_update"),
 ]
