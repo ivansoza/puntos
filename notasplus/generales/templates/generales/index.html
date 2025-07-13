@@ -96,8 +96,29 @@
               </div>
             </td>
             <td>
-              <span class="puntos-badge">{{ alumno.total_points|default:0 }}</span>
+              <div class="d-flex align-items-center">
+                <!-- Badge de puntos -->
+                <span class="puntos-badge me-2">
+                  {{ alumno.total_points|default:0 }}
+                </span>
+
+                <!-- Botón Ver detalles -->
+                <a href="{% url 'alumno_detail' alumno.pk %}"
+                  class="btn-action btn-action-detalle me-1"
+                  title="Ver detalles de {{ alumno.nombre }}">
+                  <i class="fa fa-eye"></i>
+                </a>
+
+                <!-- Botón Editar -->
+                <a href="{% url 'alumno_update' alumno.pk %}"
+                  class="btn-action btn-action-editar"
+                  title="Editar datos de {{ alumno.nombre }}">
+                  <i class="fa fa-edit"></i>
+                </a>
+              </div>
             </td>
+
+
           </tr>
         {% endfor %}
       </tbody>
@@ -480,6 +501,44 @@
         padding: 2rem 1rem;
       }
     }
+
+    /* === BOTONES DE ACCIÓN COMO BADGES === */
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  color: white;
+}
+
+/* — Ver detalles: usa los colores primarios — */
+.btn-action-detalle {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  border: none;
+}
+
+.btn-action-detalle:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* — Editar: usa los colores de éxito — */
+.btn-action-editar {
+  background: linear-gradient(135deg, var(--success-color), var(--success-hover));
+  border: none;
+}
+
+.btn-action-editar:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
   </style>
 {% endblock %}
 

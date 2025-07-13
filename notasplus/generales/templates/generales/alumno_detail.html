@@ -1,0 +1,89 @@
+{% extends "generales/base.html" %}
+{% block title %}Alumno {{ object.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+  <!-- — Volver al home — -->
+  <a href="{% url 'home' %}" class="btn btn-link mb-3">
+    <i class="fa fa-chevron-left me-1"></i>Volver al inicio
+  </a>
+
+  <!-- — Información general del alumno — -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h4 mb-3">
+        <i class="fa fa-user-graduate me-2"></i>
+        {{ object.nombre }} {{ object.apellido_paterno }} {{ object.apellido_materno }}
+      </h2>
+      <p class="mb-2">
+        <strong>Matrícula:</strong>
+        <span class="badge bg-primary">{{ object.matricula }}</span>
+      </p>
+      <p class="mb-0">
+        <strong>Año de generación:</strong> {{ object.año_de_generacion }}
+      </p>
+    </div>
+    <div class="card-footer">
+      <strong>Puntos totales de equipo:</strong>
+      <span class="badge bg-success">{{ object.total_points|default:0 }}</span>
+    </div>
+  </div>
+
+  <!-- — Equipos y sub-materias — -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">
+      <h3 class="h5 mb-0">
+        <i class="fa fa-users me-2"></i>Equipos por materia
+      </h3>
+    </div>
+    <div class="card-body">
+      {% if materia_info %}
+        {% for item in materia_info %}
+          <div class="mb-4">
+            <!-- Materia -->
+            <h4 class="h6 mb-2 text-primary">{{ item.materia.nombre }}</h4>
+
+            <!-- Equipos del alumno en la materia -->
+            <div class="mb-2">
+              {% for eq in item.equipos %}
+                <span class="badge bg-info text-dark me-1">{{ eq.nombre }}</span>
+              {% endfor %}
+            </div>
+
+            <!-- Promedio global -->
+            <p class="mb-1">
+              <strong>Promedio en la materia:</strong>
+              {{ item.promedio|floatformat:2 }}
+            </p>
+
+            <!-- Sub-materias -->
+            <ul class="list-unstyled mb-0">
+              {% for s in item.sub_stats %}
+                <li class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <i class="fa fa-check-circle me-1 text-success"></i>
+                    <strong>{{ s.sub.nombre }}:</strong>
+                    {{ s.entregadas }} de {{ s.total }} actividades entregadas
+                  </div>
+
+                  <!-- Botón Ver actividades -->
+                  <a href="{% url 'alumno_actividades' object.id s.sub.id %}"
+                     class="btn-action btn-action-detalle btn-sm"
+                     title="Ver actividades de {{ s.sub.nombre }}">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% if not forloop.last %}<hr>{% endif %}
+        {% endfor %}
+      {% else %}
+        <p class="text-muted mb-0">El alumno aún no pertenece a ningún equipo.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

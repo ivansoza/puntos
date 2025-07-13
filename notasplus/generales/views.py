@@ -10,6 +10,8 @@ from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views.generic import DetailView, CreateView, FormView
 from django.db.models import Count, Avg
+from django.db.models import Sum, Prefetch
+from django.views.generic import UpdateView
 
 from generales.forms import ActividadForm, AlumnoForm, CalificacionFormSet, MateriaForm, SubMateriaForm
 from equipos.forms import EquipoForm
@@ -284,4 +286,107 @@ class CalificacionUpdateView(LoginRequiredMixin, FormView):
         ctx["formset"]    = ctx["form"]          # alias para la plantilla
         ctx["actividad"]  = self.actividad
         ctx["submateria"] = self.actividad.submateria
+        return ctx
+    
+
+
+
+class AlumnoDetailView(LoginRequiredMixin, DetailView):
+    model         = Alumno
+    template_name = "generales/alumno_detail.html"
+
+    def get_queryset(self):
+        return (
+            Alumno.objects
+                  .annotate(total_points=Sum("equipos__puntos"))
+                  .prefetch_related(
+                      Prefetch("equipos",
+                               queryset=Equipo.objects.prefetch_related("materias"))
+                  )
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx    = super().get_context_data(**kwargs)
+        alumno = self.object
+
+        materia_info = []
+
+        # 1) Recorremos todas las materias donde el alumno tiene algún equipo
+        for mat in {m for eq in alumno.equipos.all() for m in eq.materias.all()}:
+
+            # 2) Equipos del alumno en esa materia
+            equipos_en_materia = [
+                eq for eq in alumno.equipos.all() if mat in eq.materias.all()
+            ]
+
+            # 3) Para cada sub-materia, contamos entregadas / total
+            sub_stats = []
+            for sub in mat.submaterias.all():
+                total       = sub.total_actividades()
+                entregadas  = (Calificacion.objects
+                               .filter(actividad__submateria=sub, alumno=alumno)
+                               .count())
+                sub_stats.append({
+                    "sub":        sub,
+                    "entregadas": entregadas,
+                    "total":      total,
+                })
+
+            materia_info.append({
+                "materia":   mat,
+                "equipos":   equipos_en_materia,
+                "promedio":  alumno.promedio_materia(mat),
+                "sub_stats": sub_stats,
+            })
+
+        ctx["materia_info"] = materia_info
+        return ctx
+
+class AlumnoUpdateView(LoginRequiredMixin, UpdateView):
+    model         = Alumno
+    form_class    = AlumnoForm
+    template_name = "generales/alumno_update.html"
+
+    def form_valid(self, form):
+        messages.success(self.request, "Alumno actualizado correctamente.")
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Tras guardar, vuelve a la vista de detalle
+        return reverse("alumno_detail", kwargs={"pk": self.object.pk})
+    
+
+
+
+
+class AlumnoActividadesView(LoginRequiredMixin, TemplateView):
+    template_name = "generales/alumno_actividades.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        alumno      = get_object_or_404(Alumno, pk=self.kwargs["alumno_id"])
+        submateria  = get_object_or_404(
+            SubMateria,
+            pk=self.kwargs["sub_id"],
+            materia__equipos__alumnos=alumno,   # opcional: asegura relación
+        )
+
+        # Prefetch calificaciones para evitar N+1
+        actividades = (Actividad.objects
+                       .filter(submateria=submateria)
+                       .prefetch_related(
+                           Prefetch(
+                               "calificaciones",
+                               queryset=Calificacion.objects.filter(alumno=alumno),
+                               to_attr="calificacion_del_alumno",
+                           )
+                       )
+                       .order_by("fecha_entrega"))
+
+        ctx.update({
+            "alumno":      alumno,
+            "submateria":  submateria,
+            "actividades": actividades,
+        })
         return ctx

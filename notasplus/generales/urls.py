@@ -9,6 +9,13 @@ urlpatterns = [
     path('materias/<int:pk>/',       views.MateriaDetailView.as_view(), name='materia_detail'),
     # Alumnos
     path('alumnos/crear/',           views.AlumnoCreateView.as_view(),  name='alumno_create'),
+    path("alumno/<int:pk>/", views.AlumnoDetailView.as_view(), name="alumno_detail"),
+    path("alumno/<int:pk>/editar/", views.AlumnoUpdateView.as_view(), name="alumno_update"),
+    path(
+        "alumno/<int:alumno_id>/submateria/<int:sub_id>/actividades/",
+        views.AlumnoActividadesView.as_view(),
+        name="alumno_actividades",
+    ),
     # Equipos...
     path('equipos/crear/',           views.EquipoCreateView.as_view(),  name='equipo_create'),
     path('equipos/',                 views.EquipoListView.as_view(),    name='equipo_list'),
