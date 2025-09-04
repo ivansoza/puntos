@@ -16,30 +16,37 @@ from django.views.generic import UpdateView
 from generales.forms import ActividadForm, AlumnoForm, CalificacionFormSet, MateriaForm, SubMateriaForm
 from equipos.forms import EquipoForm
 
+
+class HomePageView(TemplateView):
+    """Simple landing page shown at the site root."""
+
+    template_name = "generales/home.html"
+
+
 class IndexView(LoginRequiredMixin, TemplateView):
-    template_name = 'generales/index.html'
+    template_name = "generales/index.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['materias'] = Materia.objects.all()
+        ctx["materias"] = Materia.objects.all()
         # Anotamos a cada alumno la suma de puntos de sus equipos
-        ctx['alumnos'] = (
+        ctx["alumnos"] = (
             Alumno.objects
-                  .annotate(total_points=Sum('equipos__puntos'))
-                  .prefetch_related('equipos')
+                  .annotate(total_points=Sum("equipos__puntos"))
+                  .prefetch_related("equipos")
         )
         return ctx
 class AlumnoCreateView(LoginRequiredMixin, CreateView):
     model = Alumno
     form_class = AlumnoForm
     template_name = 'generales/alumno_form.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('dashboard')
 
 class MateriaCreateView(LoginRequiredMixin, CreateView):
     model = Materia
     form_class = MateriaForm
     template_name = 'generales/materia_form.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('dashboard')
 
 class MateriaListView(LoginRequiredMixin, ListView):
     model = Materia
@@ -51,7 +58,7 @@ class EquipoCreateView(LoginRequiredMixin, CreateView):
     model = Equipo
     form_class = EquipoForm
     template_name = 'generales/equipo_form.html'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('dashboard')
 
 
 class EquipoListView(LoginRequiredMixin, ListView):
@@ -116,15 +123,15 @@ def cambiar_puntos(request, pk, action):
             texto = f"-1 punto a «{equipo.nombre}»"
         else:
             messages.error(request, f"{equipo.nombre} ya está en 0 puntos.")
-            return redirect(request.META.get('HTTP_REFERER', 'home'))
+            return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
     else:
         messages.error(request, "Acción inválida.")
-        return redirect(request.META.get('HTTP_REFERER', 'home'))
+        return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
     equipo.save()
     messages.success(request, texto)
     # Volver a la misma página
-    return redirect(request.META.get('HTTP_REFERER', 'home'))
+    return redirect(request.META.get('HTTP_REFERER', 'dashboard'))
 
 
 

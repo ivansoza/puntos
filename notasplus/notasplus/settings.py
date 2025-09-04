@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_select2',
-    'generales',
+    'generales.apps.GeneralesConfig',
     'equipos',
-        'widget_tweaks',
+    'widget_tweaks',
 
 ]
 
@@ -132,8 +132,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # URL a la que Django redirige cuando pide login y no estás autenticado
 LOGIN_URL = 'login'            
 
-# Después de hacer login con éxito, Django irá a la URL con name='home'
-LOGIN_REDIRECT_URL = 'home'    
+# Después de hacer login con éxito, Django irá al dashboard
+LOGIN_REDIRECT_URL = 'dashboard'
 
 # Después de hacer logout, Django irá a la URL con name='login'
 LOGOUT_REDIRECT_URL = 'login'  
